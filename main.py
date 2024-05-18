@@ -1,5 +1,9 @@
 import time
-from trader import execute_trade
+from config.config import SYMBOL, SHORT_WINDOW, LONG_WINDOW, TRADE_AMOUNT, TIMEFRAME
+from data.data_handler import fetch_and_process_data, fetch_stock_list, moving_average
+from strategies.strategy import moving_average_crossover
+from trading.trader import execute_trade
+
 
 def main():
     while True:

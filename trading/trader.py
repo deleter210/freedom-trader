@@ -1,7 +1,9 @@
-from api import trade_stock
-from data_handler import fetch_and_process_data, moving_average
-from strategy import moving_average_crossover
-from config import SYMBOL, SHORT_WINDOW, LONG_WINDOW, TRADE_AMOUNT
+from trading.api import trade_stock
+from data.data_handler import fetch_and_process_data, moving_average
+from strategies.strategy import moving_average_crossover
+from config.config import SYMBOL, SHORT_WINDOW, LONG_WINDOW, TRADE_AMOUNT
+import time
+
 
 def execute_trade(data=None):
     if data is None:

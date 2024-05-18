@@ -1,7 +1,7 @@
 import requests
 import pandas as pd
 import time
-from config import API_URL, API_KEY, SECRET_KEY
+from config.config import API_URL, API_KEY, SECRET_KEY
 import hashlib
 import hmac
 

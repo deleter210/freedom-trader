@@ -1,8 +1,9 @@
 import schedule
 import time
-from trader import execute_trade
-from data_handler import fetch_and_process_data
-from config import SYMBOL
+from config.config import SYMBOL, SHORT_WINDOW, LONG_WINDOW, TRADE_AMOUNT, TIMEFRAME
+from data.data_handler import fetch_and_process_data
+from trading.trader import execute_trade
+
 
 def job():
     date_from = "01.01.2023 00:00"

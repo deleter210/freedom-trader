@@ -1,7 +1,7 @@
 import requests
 import json
-from config import API_PUBLIC_KEY, API_SECRET_KEY, BASE_URL
-from utils import generate_signature, get_nonce
+from config.config import API_PUBLIC_KEY, API_SECRET_KEY, BASE_URL
+from utils.utils import generate_signature, get_nonce
 
 def api_request(endpoint, params):
     url = f"{BASE_URL}/{endpoint}"

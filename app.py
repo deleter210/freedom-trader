@@ -3,8 +3,8 @@ from dash import Dash, dcc, html
 from dash.dependencies import Input, Output, State
 import pandas as pd
 import plotly.graph_objs as go
-from data_handler import fetch_and_process_data, moving_average, fetch_stock_list
-from config import SYMBOL, SHORT_WINDOW, LONG_WINDOW, TRADE_AMOUNT, TIMEFRAME
+from data.data_handler import fetch_and_process_data, moving_average, fetch_stock_list
+from config.config import SYMBOL, SHORT_WINDOW, LONG_WINDOW, TRADE_AMOUNT, TIMEFRAME
 
 app = Flask(__name__)
 
