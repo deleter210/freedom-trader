@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa1+YY/jGBf5Cw5BUqJ0PKgL" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-smHYkd4jWtTZv4pPom0xkF77XLV7aU5y8eTgH9Dp3G9I67VrrA3s5uhKnqfDv3XK" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Trading Bot Dashboard</h1>
+        <form method="POST" action="/start">
+            <div class="form-group">
+                <label for="symbol">Stock Symbol</label>
+                <select class="form-control" id="symbol" name="symbol">
+                    {% for stock in stock_list %}
+                    <option value="{{ stock }}">{{ stock }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="short_window">Short Window</label>
+                <input type="number" class="form-control" id="short_window" name="short_window" value="{{ short_window }}">
+            </div>
+            <div class="form-group">
+                <label for="long_window">Long Window</label>
+                <input type="number" class="form-control" id="long_window" name="long_window" value="{{ long_window }}">
+            </div>
+            <div class="form-group">
+                <label for="trade_amount">Trade Amount</label>
+                <input type="number" class="form-control" id="trade_amount" name="trade_amount" value="{{ trade_amount }}">
+            </div>
+            <div class="form-group">
+                <label for="timeframe">Timeframe (in minutes)</label>
+                <input type="number" class="form-control" id="timeframe" name="timeframe" value="{{ timeframe }}">
+            </div>
+            <button type="submit" class="btn btn-success">Start Trading Bot</button>
+        </form>
+        <div id="trade-logs" class="mt-5">
+            <h3>Trade Logs</h3>
+            <pre>{{ trade_logs }}</pre>
+        </div>
+    </div>
+</body>
+</html>

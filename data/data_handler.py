@@ -1,30 +1,42 @@
 import requests
 import pandas as pd
 import time
-from config.config import API_URL, API_KEY, SECRET_KEY
 import hashlib
 import hmac
+import logging
+from config.config import API_URL, API_KEY, SECRET_KEY
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def fetch_stock_list():
-    # This is a hypothetical endpoint and parameters; replace with the actual API details.
-    endpoint = f"{API_URL}/getStockList"
+    endpoint = f"{API_URL}/api"
     nonce = int(time.time())
     params = {
-        "cmd": "getStockList",
+        "cmd": "getSecuritiesList",
         "params": {}
     }
     params_str = '&'.join(f'{k}={v}' for k, v in params.items())
     signature = hmac.new(SECRET_KEY.encode(), params_str.encode(), hashlib.sha256).hexdigest()
     headers = {
         'X-NtApi-Sig': signature,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-NtApi-Auth-Token': API_KEY
     }
-    response = requests.post(endpoint, json=params, headers=headers)
-    if response.status_code == 200:
-        stock_list = response.json().get('stocks', [])
-        return stock_list
-    else:
-        return []
+    
+    try:
+        response = requests.post(endpoint, json=params, headers=headers)
+        if response.status_code == 200:
+            stock_list = response.json().get('securities', [])
+            logging.info(f"Fetched stock list: {stock_list}")
+            return [stock['ticker'] for stock in stock_list]  # Extract only the ticker symbols
+        elif response.status_code == 401:
+            logging.error("Unauthorized access. Please check your API key and secret key.")
+        else:
+            logging.error(f"Error fetching stock list: {response.status_code}, {response.text}")
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Request failed: {e}")
+    
+    return []
 
 def fetch_and_process_data(symbol, date_from, date_to, timeframe):
     nonce = int(time.time())
@@ -48,12 +60,18 @@ def fetch_and_process_data(symbol, date_from, date_to, timeframe):
     if response.status_code == 200:
         data = response.json().get('hloc', {}).get(symbol, [])
         if not data:
+            logging.warning("No data found for symbol.")
             return pd.DataFrame()
         df = pd.DataFrame(data, columns=['high', 'low', 'open', 'close'])
         df.index = pd.to_datetime(response.json()['xSeries'][symbol], unit='s')
+        logging.info(f"Fetched and processed data for {symbol}.")
         return df
     else:
+        logging.error(f"Error fetching data for {symbol}: {response.status_code}")
         return pd.DataFrame()
 
+get_historical_data = fetch_and_process_data
+
 def moving_average(data, window):
-    return data['close'].rolling(window=window).mean()
+    """Calculate the moving average for the given window size."""
+    return data['close']
